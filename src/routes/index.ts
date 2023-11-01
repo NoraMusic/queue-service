@@ -2,11 +2,17 @@ import QueueController from '../controllers/QueueController';
 import TRoute from '../core/types/TRoute';
 
 const routes: Array<TRoute> = [
+	// {
+	// 	method: 'GET',
+	// 	url: '/api/queue/:guildId',
+	// 	//schema: QueueController.schema,
+	// 	handler: QueueController.handler,
+	// },
 	{
-		method: 'GET',
-		url: '/api',
+		method: 'POST',
+		url: '/api/queue/:guildId',
 		schema: QueueController.schema,
-		handler: QueueController.handler,
+		handler: QueueController.AddSongController,
 	},
 ];
 

@@ -1,6 +1,7 @@
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyInstance, RouteGenericInterface } from 'fastify';
 import Application from './Application';
 import TRoute from './types/TRoute';
+import RedisService from './services/RedisService';
 
 export default class Server {
 	public readonly application: Application;
@@ -30,6 +31,7 @@ export default class Server {
 
 	private async run(): Promise<void> {
 		try {
+			await RedisService.connect();
 			await this.fastify.listen({ port: this.application.port });
 		} catch (error) {
 			this.fastify.log.error(error);
