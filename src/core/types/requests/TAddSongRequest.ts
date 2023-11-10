@@ -1,7 +1,5 @@
-import { FastifyRequest } from 'fastify';
-
-type TAddSongRequest = FastifyRequest<{
+type TAddSongRequest = {
 	Params: { guildId: string };
-}>;
+};
 
 export default TAddSongRequest;

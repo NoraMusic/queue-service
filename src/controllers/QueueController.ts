@@ -1,15 +1,27 @@
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import RedisService from '../core/services/RedisService';
 import TAddSongRequest from '../core/types/requests/TAddSongRequest';
-import { Api400Exception } from '../core/extendeds/Exception';
 
 export default class QueueController {
 	private static readonly _cache: RedisService = RedisService;
 
-	static get schema() {
+	static get AddSongSchema() {
 		return {
 			params: {
-				guildId: { type: 'string' },
+				type: 'object',
+				properties: {
+					guildId: { type: 'string', minLength: 18, maxLength: 18, pattern: '^[0-9]+$' },
+				},
+			},
+			body: {
+				type: 'object',
+				required: ['name', 'search_type'],
+				properties: {
+					name: { type: 'string' },
+					url: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+					thumbnail: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+					search_type: { enum: ['search', 'url'] },
+				},
 			},
 			response: {
 				200: {
@@ -26,11 +38,9 @@ export default class QueueController {
 	 * Put song into queue POST
 	 * @requires guildId in the url & TrackInfo in the body
 	 */
-	public static async AddSongController(req: TAddSongRequest, res: FastifyReply) {
+	public static async AddSongController(req: FastifyRequest<TAddSongRequest>, res: FastifyReply) {
 		const { guildId } = req.params;
-		if (guildId === '') {
-			throw new Api400Exception('Missing guild ID in the url.');
-		}
+		console.log(req.body);
 		res.code(200).send({ hello: guildId });
 	}
 }

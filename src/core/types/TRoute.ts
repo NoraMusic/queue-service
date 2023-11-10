@@ -5,7 +5,8 @@ type TRoute = {
 	url: string;
 	schema?: object;
 	preHandler?: () => unknown;
-	handler: (req: FastifyRequest, res: FastifyReply) => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	handler: (req: FastifyRequest<any>, res: FastifyReply) => void;
 };
 
 export default TRoute;

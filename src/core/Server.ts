@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, RouteGenericInterface } from 'fastify';
+import fastify, { FastifyInstance } from 'fastify';
 import Application from './Application';
 import TRoute from './types/TRoute';
 import RedisService from './services/RedisService';

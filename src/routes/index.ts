@@ -11,7 +11,7 @@ const routes: Array<TRoute> = [
 	{
 		method: 'POST',
 		url: '/api/queue/:guildId',
-		schema: QueueController.schema,
+		schema: QueueController.AddSongSchema,
 		handler: QueueController.AddSongController,
 	},
 ];
