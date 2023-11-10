@@ -41,6 +41,7 @@ export default class QueueController {
 	public static async AddSongController(req: FastifyRequest<TAddSongRequest>, res: FastifyReply) {
 		const { guildId } = req.params;
 		console.log(req.body);
+		RedisService.listRightPush(Math.random().toString(), Math.random().toString());
 		res.code(200).send({ hello: guildId });
 	}
 }
