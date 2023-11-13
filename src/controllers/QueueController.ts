@@ -48,7 +48,7 @@ export default class QueueController {
 		};
 		const result: string | false = await QueueService.addSong(track, guildId);
 		if (!result) {
-			throw new Api500Exception('here');
+			throw new Api500Exception('Cache is offline.');
 		}
 		res.code(201).send({ uuid: result });
 	}
