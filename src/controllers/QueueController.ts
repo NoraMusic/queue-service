@@ -1,11 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import TAddSongRequest from '../core/types/requests/TAddSongRequest';
+import { TAddSongReq, TGetQueueReq } from '../core/types/requests';
 import QueueService from '../core/services/QueueService';
 import TTrackInfo from '../core/types/TTrackInfo';
 import { Api500Exception } from '../core/extendeds/Exception';
+import TQueueItem from '../core/types/TQueueItem';
 
 export default class QueueController {
-	static get AddSongSchema() {
+	static get addSongSchema() {
 		return {
 			params: {
 				type: 'object',
@@ -38,7 +39,7 @@ export default class QueueController {
 	 * Put song into queue POST
 	 * @requires guildId in the url & TrackInfo in the body
 	 */
-	public static async AddSongController(req: FastifyRequest<TAddSongRequest>, res: FastifyReply) {
+	public static async addSongController(req: FastifyRequest<TAddSongReq>, res: FastifyReply) {
 		const { guildId } = req.params;
 		const track: TTrackInfo = {
 			name: req.body.name,
@@ -51,5 +52,49 @@ export default class QueueController {
 			throw new Api500Exception('Cache is offline.');
 		}
 		res.code(201).send({ uuid: result });
+	}
+
+	static get getQueueSchema() {
+		return {
+			params: {
+				type: 'object',
+				properties: {
+					guildId: { type: 'string', minLength: 18, maxLength: 18, pattern: '^[0-9]+$' },
+				},
+			},
+			response: {
+				200: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							uuid: { type: 'string' },
+							track: {
+								type: 'object',
+								properties: {
+									name: { type: 'string' },
+									url: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+									thumbnail: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+									search_type: { enum: ['search', 'url'] },
+								},
+							},
+						},
+					},
+				},
+			},
+		};
+	}
+
+	/**
+	 * Get queue GET
+	 * @requires guildId in the url
+	 */
+	public static async getQueueController(req: FastifyRequest<TGetQueueReq>, res: FastifyReply) {
+		const { guildId } = req.params;
+		const result: TQueueItem[] | false = await QueueService.getQueue(guildId);
+		if (!result) {
+			throw new Api500Exception('Cache is offline.');
+		}
+		res.code(200).send(result);
 	}
 }

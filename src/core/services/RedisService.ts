@@ -36,7 +36,7 @@ export default class RedisService {
 	}
 
 	/**
-	 * @returns Key list array
+	 * @returns Array
 	 */
 	static async getFullList(key: string): Promise<string[] | false> {
 		if (!this.isRedisOnline) return false;
