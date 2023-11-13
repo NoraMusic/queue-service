@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import RedisService from '../core/services/RedisService';
 import TAddSongRequest from '../core/types/requests/TAddSongRequest';
+import QueueService from '../core/services/QueueService';
+import TTrackInfo from '../core/types/TTrackInfo';
+import { Api500Exception } from '../core/extendeds/Exception';
 
 export default class QueueController {
-	private static readonly _cache: RedisService = RedisService;
-
 	static get AddSongSchema() {
 		return {
 			params: {
@@ -24,10 +24,10 @@ export default class QueueController {
 				},
 			},
 			response: {
-				200: {
+				201: {
 					type: 'object',
 					properties: {
-						hello: { type: 'string' },
+						uuid: { type: 'string' },
 					},
 				},
 			},
@@ -40,8 +40,16 @@ export default class QueueController {
 	 */
 	public static async AddSongController(req: FastifyRequest<TAddSongRequest>, res: FastifyReply) {
 		const { guildId } = req.params;
-		console.log(req.body);
-		RedisService.listRightPush(Math.random().toString(), Math.random().toString());
-		res.code(200).send({ hello: guildId });
+		const track: TTrackInfo = {
+			name: req.body.name,
+			url: req.body.url,
+			thumbnail: req.body.thumbnail,
+			search_type: req.body.search_type,
+		};
+		const result: string | false = await QueueService.addSong(track, guildId);
+		if (!result) {
+			throw new Api500Exception('here');
+		}
+		res.code(201).send({ uuid: result });
 	}
 }

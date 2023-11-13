@@ -30,14 +30,16 @@ export default class RedisService {
 	/**
 	 * @returns Length of the list after the push operation.
 	 */
-	static async listRightPush(key: string, value: string) {
+	static async listRightPush(key: string, value: string): Promise<number | false> {
+		if (!this.isRedisOnline) return false;
 		return RedisService.client.rPush(key, value);
 	}
 
 	/**
-	 * @returns Length of the list after the push operation.
+	 * @returns Key list array
 	 */
-	static async getFullList(key: string) {
+	static async getFullList(key: string): Promise<string[] | false> {
+		if (!this.isRedisOnline) return false;
 		return await RedisService.client.lRange(key, 0, -1);
 	}
 }
