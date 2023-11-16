@@ -18,4 +18,11 @@ export default class QueueService {
 		if (!result) return false;
 		return result.map((queueItem) => JSON.parse(queueItem));
 	}
+
+	public static async removeTrack(guildId: string, trackUuid: string): Promise<number | false> {
+		const queue: TQueueItem[] | false = await this.getQueue(guildId);
+		const match: TQueueItem | undefined = (queue || []).find((track) => track.uuid === trackUuid);
+		if (match === undefined) return false;
+		return await RedisService.listRemoveByValue(`queue:${guildId}`, JSON.stringify(match));
+	}
 }

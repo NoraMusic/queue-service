@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { TAddSongReq, TGetQueueReq } from '../core/types/requests';
+import { TAddSongReq, TGetQueueReq, TRemoveTrackReq } from '../core/types/requests';
 import QueueService from '../core/services/QueueService';
 import TTrackInfo from '../core/types/TTrackInfo';
 import { Api500Exception } from '../core/extendeds/Exception';
@@ -92,9 +92,40 @@ export default class QueueController {
 	public static async getQueueController(req: FastifyRequest<TGetQueueReq>, res: FastifyReply) {
 		const { guildId } = req.params;
 		const result: TQueueItem[] | false = await QueueService.getQueue(guildId);
-		if (!result) {
-			throw new Api500Exception('Cache is offline.');
-		}
+		if (!result) throw new Api500Exception('Cache is offline.');
 		res.code(200).send(result);
+	}
+
+	static get removeTrackSchema() {
+		return {
+			params: {
+				type: 'object',
+				properties: {
+					guildId: { type: 'string', minLength: 18, maxLength: 18, pattern: '^[0-9]+$' },
+					uuid: { type: 'string' },
+				},
+			},
+			response: {
+				200: {
+					type: 'object',
+					properties: {
+						message: { type: 'string' },
+					},
+				},
+			},
+		};
+	}
+
+	/**
+	 * Remove track from queue DELETE
+	 * @requires guildId in the url
+	 * @requires trackId in the url
+	 */
+	public static async removeTrackController(req: FastifyRequest<TRemoveTrackReq>, res: FastifyReply) {
+		const { guildId, trackId } = req.params;
+		const result: number | false = await QueueService.removeTrack(guildId, trackId);
+		if (!result) throw new Api500Exception('Cache is offline.');
+
+		res.code(204);
 	}
 }

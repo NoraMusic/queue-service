@@ -42,4 +42,12 @@ export default class RedisService {
 		if (!this.isRedisOnline) return false;
 		return await RedisService.client.lRange(key, 0, -1);
 	}
+
+	/**
+	 * @returns Number of removed elemetns.
+	 */
+	static async listRemoveByValue(listKey: string, value: string): Promise<number | false> {
+		if (!this.isRedisOnline) return false;
+		return await RedisService.client.lRem(listKey, 0, value);
+	}
 }
