@@ -5,10 +5,10 @@ import QueueService from '../core/services/QueueService';
 import { Api500Exception } from '../core/extendeds/Exception';
 
 /**
- * DELETE / Remove every song from queue
+ * POST / Shuffle songs in queue
  * @requires guildId as a param
  */
-class ClearQueueController extends Controller {
+class ShuffleQueueController extends Controller {
 	get schema() {
 		return {
 			params: {
@@ -19,7 +19,12 @@ class ClearQueueController extends Controller {
 				},
 			},
 			response: {
-				204: {},
+				200: {
+					type: 'object',
+					properties: {
+						message: { type: 'string' },
+					},
+				},
 			},
 		};
 	}
@@ -27,11 +32,11 @@ class ClearQueueController extends Controller {
 	public async handler(req: FastifyRequest<TGetQueueReq>, res: FastifyReply) {
 		const { guildId } = req.params;
 
-		const result: number | false = await QueueService.clearQueue(guildId);
+		const result: number | false = await QueueService.shuffleQueue(guildId);
 		if (!result) throw new Api500Exception('Cache is offline.');
 
-		res.code(204);
+		res.code(200).send({ message: 'Shuffled queue.' });
 	}
 }
 
-export default new ClearQueueController();
+export default new ShuffleQueueController();

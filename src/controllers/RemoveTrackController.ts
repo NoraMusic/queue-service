@@ -20,9 +20,7 @@ class RemoveTrackController extends Controller {
 				},
 			},
 			response: {
-				204: {
-					description: 'Successfully deleted item',
-				},
+				204: {},
 			},
 		};
 	}

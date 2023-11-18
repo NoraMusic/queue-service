@@ -30,7 +30,7 @@ export default class RedisService {
 	/**
 	 * @returns Length of the list after the push operation.
 	 */
-	static async listRightPush(key: string, value: string): Promise<number | false> {
+	static async listRightPush(key: string, value: string | string[]): Promise<number | false> {
 		if (!this.isRedisOnline) return false;
 		return RedisService.client.rPush(key, value);
 	}
@@ -51,7 +51,7 @@ export default class RedisService {
 		return await RedisService.client.lRem(listKey, 0, value);
 	}
 
-	static async removeKey(key: string[]): Promise<number | false> {
+	static async removeKey(key: string | string[]): Promise<number | false> {
 		if (!this.isRedisOnline) return false;
 		return await RedisService.client.del(key);
 	}

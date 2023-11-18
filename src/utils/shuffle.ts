@@ -1,7 +1,9 @@
-export default function shuffleArray(array: unknown[]): unknown[] {
+export default function shuffleArray<T>(array: T[]): T[] {
 	let arrayLength: number = array.length;
 	let randomIndex: number;
-	let temp: unknown;
+	let temp: T;
+
+	if (arrayLength < 2) return array;
 
 	while (arrayLength) {
 		randomIndex = Math.floor(Math.random() * arrayLength--);

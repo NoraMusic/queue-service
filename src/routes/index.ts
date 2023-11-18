@@ -3,6 +3,7 @@ import {
 	ClearQueueController,
 	GetQueueController,
 	RemoveTrackController,
+	ShuffleQueueController,
 } from '../controllers/index';
 import TRoute from '../core/types/TRoute';
 
@@ -18,6 +19,12 @@ const routes: Array<TRoute> = [
 		url: '/api/queue/:guildId',
 		schema: ClearQueueController.schema,
 		handler: ClearQueueController.handler,
+	},
+	{
+		method: 'POST',
+		url: '/api/queue/:guildId/shuffle',
+		schema: ShuffleQueueController.schema,
+		handler: ShuffleQueueController.handler,
 	},
 	///
 	{
@@ -40,7 +47,7 @@ export default routes;
  * ENDPOINTS DEV
  * *** GET /api/queue/:guildId Get all songs in queue
  * *** DELETE /api/queue/:guildId Remove every song from queue
- * POST /api/queue/:guildId/shuffle Shuffle songs in queue
+ * *** POST /api/queue/:guildId/shuffle Shuffle songs in queue
  *
  * *** POST /api/queue/:guildId/tracks/ Add track to queue
  * *** DELETE /api/queue/:guildId/tracks/:id Remove specific track from queue by ids

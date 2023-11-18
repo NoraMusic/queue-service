@@ -1,3 +1,4 @@
+import shuffleArray from '../../utils/shuffle';
 import TQueueItem from '../types/TQueueItem';
 import TTrackInfo from '../types/TTrackInfo';
 import RedisService from './RedisService';
@@ -27,6 +28,16 @@ export default class QueueService {
 	}
 
 	public static async clearQueue(guildId: string): Promise<number | false> {
-		return await RedisService.removeKey([`queue:${guildId}`]);
+		return await RedisService.removeKey(`queue:${guildId}`);
+	}
+
+	public static async shuffleQueue(guildId: string): Promise<number | false> {
+		const queueKey = `queue:${guildId}`;
+		const queue: string[] | false = await RedisService.getFullList(`queue:${guildId}`);
+		if (!queue) return false;
+
+		const shuffledArray: string[] = shuffleArray<string>(queue);
+		await RedisService.removeKey(queueKey);
+		return await RedisService.listRightPush(queueKey, shuffledArray);
 	}
 }
