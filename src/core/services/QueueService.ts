@@ -25,4 +25,8 @@ export default class QueueService {
 		if (match === undefined) return false;
 		return await RedisService.listRemoveByValue(`queue:${guildId}`, JSON.stringify(match));
 	}
+
+	public static async clearQueue(guildId: string): Promise<number | false> {
+		return await RedisService.removeKey([`queue:${guildId}`]);
+	}
 }

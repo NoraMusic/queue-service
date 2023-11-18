@@ -1,15 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import Controller from '../core/extendeds/Controller';
-import { TRemoveTrackReq } from '../core/types/requests';
+import { TGetQueueReq } from '../core/types/requests';
 import QueueService from '../core/services/QueueService';
 import { Api500Exception } from '../core/extendeds/Exception';
 
 /**
- * DELETE / Remove specific track from queue by ids
+ * DELETE / Remove every song from queue
  * @requires guildId as a param
- * @requires trackId as a param
  */
-class RemoveTrackController extends Controller {
+class ClearQueueController extends Controller {
 	get schema() {
 		return {
 			params: {
@@ -21,19 +20,20 @@ class RemoveTrackController extends Controller {
 			},
 			response: {
 				204: {
-					description: 'Successfully deleted item',
+					description: 'Successfully deleted items',
 				},
 			},
 		};
 	}
 
-	async handler(req: FastifyRequest<TRemoveTrackReq>, res: FastifyReply) {
-		const { guildId, trackId } = req.params;
-		const result: number | false = await QueueService.removeTrack(guildId, trackId);
+	public async handler(req: FastifyRequest<TGetQueueReq>, res: FastifyReply) {
+		const { guildId } = req.params;
+
+		const result: number | false = await QueueService.clearQueue(guildId);
 		if (!result) throw new Api500Exception('Cache is offline.');
 
 		res.code(204);
 	}
 }
 
-export default new RemoveTrackController();
+export default new ClearQueueController();

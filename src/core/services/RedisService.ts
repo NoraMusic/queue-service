@@ -50,4 +50,9 @@ export default class RedisService {
 		if (!this.isRedisOnline) return false;
 		return await RedisService.client.lRem(listKey, 0, value);
 	}
+
+	static async removeKey(key: string[]): Promise<number | false> {
+		if (!this.isRedisOnline) return false;
+		return await RedisService.client.del(key);
+	}
 }
