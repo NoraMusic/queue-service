@@ -1,25 +1,25 @@
-import QueueController from '../controllers/QueueController';
+import { AddTrackController, GetQueueController, RemoveTrackController } from '../controllers/index';
 import TRoute from '../core/types/TRoute';
 
 const routes: Array<TRoute> = [
 	{
 		method: 'GET',
 		url: '/api/queue/:guildId',
-		schema: QueueController.getQueueSchema,
-		handler: QueueController.getQueueController,
+		schema: GetQueueController.schema,
+		handler: GetQueueController.handler,
 	},
 	///
 	{
 		method: 'POST',
 		url: '/api/queue/:guildId/tracks',
-		schema: QueueController.addSongSchema,
-		handler: QueueController.addSongController,
+		schema: AddTrackController.schema,
+		handler: AddTrackController.handler,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/queue/:guildId/tracks/:trackId',
-		schema: QueueController.removeTrackSchema,
-		handler: QueueController.removeTrackController,
+		schema: RemoveTrackController.schema,
+		handler: RemoveTrackController.handler,
 	},
 ];
 
