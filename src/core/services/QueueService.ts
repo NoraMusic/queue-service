@@ -40,4 +40,12 @@ export default class QueueService {
 		await RedisService.removeKey(queueKey);
 		return await RedisService.listRightPush(queueKey, shuffledArray);
 	}
+
+	public static async getTrack(guildId: string, trackUuid: string): Promise<TQueueItem | undefined | false> {
+		const queue: TQueueItem[] | false = await this.getQueue(guildId);
+		if (queue === false) return false;
+
+		const match: TQueueItem | undefined = queue.find((track) => track.uuid === trackUuid);
+		return match;
+	}
 }

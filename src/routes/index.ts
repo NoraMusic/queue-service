@@ -2,6 +2,7 @@ import {
 	AddTrackController,
 	ClearQueueController,
 	GetQueueController,
+	GetTrackController,
 	RemoveTrackController,
 	ShuffleQueueController,
 } from '../controllers/index';
@@ -39,6 +40,12 @@ const routes: Array<TRoute> = [
 		schema: RemoveTrackController.schema,
 		handler: RemoveTrackController.handler,
 	},
+	{
+		method: 'GET',
+		url: '/api/queue/:guildId/tracks/:id',
+		schema: GetTrackController.schema,
+		handler: GetTrackController.handler,
+	},
 ];
 
 export default routes;
@@ -51,6 +58,6 @@ export default routes;
  *
  * *** POST /api/queue/:guildId/tracks/ Add track to queue
  * *** DELETE /api/queue/:guildId/tracks/:id Remove specific track from queue by ids
- * GET /api/queue/:guildId/tracks/:id Get specific track information by id
+ * *** GET /api/queue/:guildId/tracks/:id Get specific track information by id
  * POST /api/queue/:guildId/tracks/:id/move Move track into specific index
  */
