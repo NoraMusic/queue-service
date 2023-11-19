@@ -44,7 +44,7 @@ class GetTrackController extends Controller {
 	async handler(req: FastifyRequest<TRemoveTrackReq>, res: FastifyReply) {
 		const { guildId, trackId } = req.params;
 		const result: TQueueItem | undefined | false = await QueueService.getTrack(guildId, trackId);
-		if (!result) throw new Api500Exception('Cache is offline.');
+		if (result === false) throw new Api500Exception('Cache is offline.');
 
 		if (result === undefined) {
 			throw new Api404Exception();

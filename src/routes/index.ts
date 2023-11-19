@@ -42,7 +42,7 @@ const routes: Array<TRoute> = [
 	},
 	{
 		method: 'GET',
-		url: '/api/queue/:guildId/tracks/:id',
+		url: '/api/queue/:guildId/tracks/:trackId',
 		schema: GetTrackController.schema,
 		handler: GetTrackController.handler,
 	},
