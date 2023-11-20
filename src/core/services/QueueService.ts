@@ -48,4 +48,15 @@ export default class QueueService {
 		const match: TQueueItem | undefined = queue.find((track) => track.uuid === trackUuid);
 		return match;
 	}
+
+	public static async moveTrackToIndex(
+		guildId: string,
+		trackUuid: string,
+		index: number
+	): Promise<boolean | undefined> {
+		const queue: TQueueItem[] | false = await this.getQueue(guildId);
+		const match: TQueueItem | undefined = (queue || []).find((track) => track.uuid === trackUuid);
+		if (match === undefined) return undefined;
+		return await RedisService.moveElementToIndex(`queue:${guildId}`, JSON.stringify(match), index);
+	}
 }

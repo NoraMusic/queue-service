@@ -4,6 +4,7 @@ import GetQueueController from './GetQueueController';
 import ClearQueueController from './ClearQueueController';
 import ShuffleQueueController from './ShuffleQueueController';
 import GetTrackController from './GetTrackController';
+import MoveTrackController from './MoveTrackController';
 
 export {
 	AddTrackController,
@@ -12,4 +13,5 @@ export {
 	ClearQueueController,
 	ShuffleQueueController,
 	GetTrackController,
+	MoveTrackController,
 };

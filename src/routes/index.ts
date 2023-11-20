@@ -3,6 +3,7 @@ import {
 	ClearQueueController,
 	GetQueueController,
 	GetTrackController,
+	MoveTrackController,
 	RemoveTrackController,
 	ShuffleQueueController,
 } from '../controllers/index';
@@ -45,6 +46,12 @@ const routes: Array<TRoute> = [
 		url: '/api/queue/:guildId/tracks/:trackId',
 		schema: GetTrackController.schema,
 		handler: GetTrackController.handler,
+	},
+	{
+		method: 'POST',
+		url: '/api/queue/:guildId/tracks/:trackId/move',
+		schema: MoveTrackController.schema,
+		handler: MoveTrackController.handler,
 	},
 ];
 
